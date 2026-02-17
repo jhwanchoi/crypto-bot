@@ -23,10 +23,10 @@ Each layer can override the one below it. If an upper layer fails, the bot falls
 ## Features
 
 - **DCA + RSI Strategy**: Tiered buy multipliers (oversold 1.5x, low 1.2x, neutral 1.0x), RSI-based sell signals
-- **Risk Management**: Per-trade limits (5%), daily trade caps (6), stop-loss (8%), take-profit (15%), min cash reserve (20%)
+- **Conservative LLM Advisor**: Claude Opus 4.6 via AWS Bedrock — capital-preservation-first philosophy, Korean-language reasoning, skip-liberal risk analysis
+- **Risk Management**: Per-trade limits (5%), daily trade caps (6), stop-loss (8%), take-profit (15%), min cash reserve (20%), min order guard (5,000 KRW)
 - **Paper Trading**: Simulated orders with real market data and 0.05% fee modeling
-- **LLM Advisor**: Claude Opus 4.6 via AWS Bedrock for market phase analysis and parameter tuning
-- **RL Agent**: FinRL pretrained weights for quantitative signal generation
+- **RL Agent**: FinRL pretrained weights for quantitative signal generation (fallback mode when model unavailable)
 - **Notifications**: Telegram alerts for trades and errors
 - **Backtesting**: Historical simulation with Sharpe ratio, max drawdown, win rate metrics
 - **Trade Logging**: SQLite database for all trade history
@@ -52,8 +52,9 @@ Set environment variables or edit `config/settings.yaml`:
 ```bash
 export UPBIT_ACCESS_KEY=your_key
 export UPBIT_SECRET_KEY=your_secret
-export TELEGRAM_BOT_TOKEN=your_token    # optional
-export TELEGRAM_CHAT_ID=your_chat_id    # optional
+export TELEGRAM_BOT_TOKEN=your_token      # optional
+export TELEGRAM_CHAT_ID=your_chat_id      # optional
+# AWS credentials: configure via 'aws configure --profile prod'
 ```
 
 Key settings in `config/settings.yaml`:
@@ -66,6 +67,8 @@ Key settings in `config/settings.yaml`:
 | `risk.stop_loss_pct` | `8` | Stop-loss threshold (%) |
 | `risk.take_profit_pct` | `15` | Take-profit threshold (%) |
 | `llm.enabled` | `true` | Enable Claude advisor |
+| `llm.aws_profile` | `prod` | AWS credentials profile |
+| `llm.region` | `ap-northeast-2` | AWS Bedrock region |
 | `rl.enabled` | `true` | Enable RL agent |
 
 ## Project Structure
@@ -128,7 +131,7 @@ Every 4 hours, the bot runs a cycle per asset (BTC, ETH):
 
 1. **Collect** market data (OHLCV, RSI, Bollinger Bands, Fear & Greed)
 2. **RL signal** — FinRL model suggests parameter adjustments
-3. **LLM analysis** — Claude analyzes market phase, may override action
+3. **LLM analysis** — Claude analyzes market phase with conservative bias, may override to skip
 4. **Strategy** — DCA+RSI determines buy/sell/skip with adjusted parameters
 5. **Risk check** — validates against daily limits, cash reserve, position size
 6. **Execute** — places order (paper or live)
