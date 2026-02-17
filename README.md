@@ -1,5 +1,13 @@
 # Crypto Trading Bot
 
+![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)
+![Claude](https://img.shields.io/badge/Claude_Opus_4.6-Bedrock-D97706?logo=anthropic&logoColor=white)
+![FinRL](https://img.shields.io/badge/FinRL-PPO-4B0082)
+![Upbit](https://img.shields.io/badge/Upbit-KRW_Market-093687)
+![uv](https://img.shields.io/badge/uv-Package_Manager-DE5FE9?logo=uv&logoColor=white)
+![Ruff](https://img.shields.io/badge/Ruff-Linter-D7FF64?logo=ruff&logoColor=black)
+![pytest](https://img.shields.io/badge/pytest-167_tests_|_98%25_cov-0A9EDC?logo=pytest&logoColor=white)
+
 3-layer hybrid auto-trading bot for Upbit (KRW market) targeting BTC and ETH.
 
 ## Architecture
