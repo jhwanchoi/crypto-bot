@@ -17,7 +17,7 @@ class TestBuildAnalysisPrompt:
 
         assert "BTC-USD" in prompt
         assert "35.0" in prompt or "35.00" in prompt
-        assert "50000" in prompt
+        assert "50,000" in prompt or "50000" in prompt
         assert "2.5" in prompt or "2.50" in prompt
         assert "-3.2" in prompt or "-3.20" in prompt
         assert "middle" in prompt
