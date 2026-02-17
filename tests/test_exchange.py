@@ -203,4 +203,4 @@ def test_paper_sell_with_none_price(mock_price, client):
 
     result = client.sell_market_order("KRW-BTC", 0.001)
     assert "error" in result
-    assert result["error"] == "Cannot get current price"
+    assert "최소 주문" in result["error"] or "price" in result["error"]

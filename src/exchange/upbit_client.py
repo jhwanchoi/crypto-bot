@@ -1,6 +1,8 @@
 import pyupbit
 from loguru import logger
 
+MIN_ORDER_KRW = 5000
+
 
 class UpbitClient:
     def __init__(self, access_key: str, secret_key: str, paper_mode: bool = True):
@@ -35,6 +37,10 @@ class UpbitClient:
         return self._upbit.get_balance(currency)
 
     def buy_market_order(self, ticker: str, amount_krw: float) -> dict:
+        if amount_krw < MIN_ORDER_KRW:
+            msg = f"매수 금액 {amount_krw:,.0f}원이 최소 주문 금액({MIN_ORDER_KRW:,}원) 미만"
+            logger.warning(msg)
+            return {"error": msg}
         if self.paper_mode:
             return self._paper_buy(ticker, amount_krw)
         result = self._upbit.buy_market_order(ticker, amount_krw)
@@ -42,6 +48,12 @@ class UpbitClient:
         return result
 
     def sell_market_order(self, ticker: str, amount: float) -> dict:
+        price = self.get_current_price(ticker)
+        estimated_krw = amount * price if price else 0
+        if estimated_krw < MIN_ORDER_KRW:
+            msg = f"매도 금액 {estimated_krw:,.0f}원이 최소 주문 금액({MIN_ORDER_KRW:,}원) 미만"
+            logger.warning(msg)
+            return {"error": msg}
         if self.paper_mode:
             return self._paper_sell(ticker, amount)
         result = self._upbit.sell_market_order(ticker, amount)
