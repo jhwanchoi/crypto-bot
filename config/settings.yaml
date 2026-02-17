@@ -1,0 +1,60 @@
+exchange:
+  name: upbit
+  access_key: ${UPBIT_ACCESS_KEY}
+  secret_key: ${UPBIT_SECRET_KEY}
+
+assets:
+  - ticker: KRW-BTC
+    allocation: 0.6
+  - ticker: KRW-ETH
+    allocation: 0.4
+
+strategy:
+  type: dca_rsi
+  interval_hours: 4
+  base_amount_krw: 5000
+  rsi_period: 14
+  rsi_buy_threshold: 30
+  rsi_sell_threshold: 70
+  buy_multipliers:
+    oversold: 1.5
+    low: 1.2
+    neutral: 1.0
+
+risk:
+  max_buy_per_trade_pct: 5
+  max_daily_trades: 6
+  stop_loss_pct: 8
+  take_profit_pct: 15
+  take_profit_sell_ratio: 0.3
+  max_position_pct: 80
+  min_cash_pct: 20
+
+rl:
+  enabled: true
+  model_path: models/finrl_pretrained.zip
+  fallback_to_default: true
+
+llm:
+  enabled: true
+  provider: bedrock
+  model_id: anthropic.claude-opus-4-6-v1
+  temperature: 0
+  max_tokens: 1024
+  region: ap-northeast-2
+  aws_profile: prod
+  verify_ssl: false
+  fallback_to_default: true
+
+notification:
+  telegram:
+    enabled: false
+    bot_token: ${TELEGRAM_BOT_TOKEN}
+    chat_id: ${TELEGRAM_CHAT_ID}
+
+logging:
+  level: INFO
+  file: logs/crypto_bot.log
+  rotation: 10 MB
+
+mode: paper

@@ -1,0 +1,60 @@
+[project]
+name = "crypto-bot"
+version = "0.1.0"
+description = "3-layer hybrid crypto trading bot (DCA+RSI + FinRL + Claude Bedrock)"
+requires-python = ">=3.11"
+dependencies = [
+    "pyupbit>=0.2.33",
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "pyyaml>=6.0",
+    "apscheduler>=3.10.0",
+    "loguru>=0.7.0",
+    "python-telegram-bot>=20.0",
+    "boto3>=1.28.0",
+    "stable-baselines3>=2.1.0",
+    "gymnasium>=0.29.0",
+    "finrl>=0.3.6",
+    "requests>=2.31.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pre-commit>=3.5.0",
+    "ruff>=0.8.0",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "N",    # pep8-naming
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "SIM",  # flake8-simplify
+    "TCH",  # flake8-type-checking
+    "RUF",  # ruff-specific
+]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[dependency-groups]
+dev = [
+    "pytest-cov>=7.0.0",
+]
